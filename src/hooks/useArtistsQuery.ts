@@ -8,7 +8,7 @@ export const useArtistsQuery = () => {
   return useQuery({
     queryKey: ['releases'],
     queryFn: async () => {
-      const { data } = await axios.get('http://localhost:4000/artists', {
+      const { data } = await axios.get('${process.env.BACKEND_URL}/artists', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

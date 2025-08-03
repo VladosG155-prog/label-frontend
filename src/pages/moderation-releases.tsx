@@ -81,7 +81,7 @@ export default function ModerationReleases() {
                                         {/* Верхняя часть: обложка + инфо */}
                                         <div className="flex gap-4">
                                             <img
-                                                src={`http://localhost:4000/${release.coverUrl}`}
+                                                src={`${process.env.BACKEND_URL}/${release.coverUrl}`}
                                                 alt={release.title}
                                                 className="w-24 h-24 rounded-lg object-cover border border-[#3a3a40]"
                                             />
@@ -115,7 +115,7 @@ export default function ModerationReleases() {
                                                     return (
                                                         <button
                                                             key={index}
-                                                            onClick={() => togglePlay(release._id, index, `http://localhost:4000/${url}`)}
+                                                            onClick={() => togglePlay(release._id, index, `${process.env.BACKEND_URL}/${url}`)}
                                                             className={`w-10 h-10 flex items-center justify-center rounded-md border ${
                                                                 isPlaying ? 'bg-green-600 border-green-500' : 'bg-[#2e2e33] border-[#444]'
                                                             } hover:bg-green-500 transition`}

@@ -8,7 +8,7 @@ export const useUpdateProfile = () => {
 
   return useMutation({
     mutationFn: async (updatedData) => {
-      return await axios.put('http://localhost:4000/profile', updatedData, {
+      return await axios.put('${process.env.BACKEND_URL}/profile', updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

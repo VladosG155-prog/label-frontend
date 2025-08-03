@@ -10,7 +10,7 @@ export function Header() {
     useEffect(() => {
         const token = localStorage.getItem('auth_token');
         if (token) {
-            fetch('http://localhost:4000/auth/me', {
+            fetch('${process.env.BACKEND_URL}/auth/me', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -34,7 +34,7 @@ export function Header() {
         if (!sessionToken) return;
         const interval = setInterval(async () => {
             try {
-                const res = await fetch(`http://localhost:4000/auth/poll?token=${sessionToken}`);
+                const res = await fetch(`${process.env.BACKEND_URL}/auth/poll?token=${sessionToken}`);
                 const data = await res.json();
 
                 if (data.authorized) {
@@ -54,7 +54,7 @@ export function Header() {
     const handleTelegramLogin = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:4000/auth/telegram/request', {
+            const res = await fetch('${process.env.BACKEND_URL}/auth/telegram/request', {
                 method: 'POST'
             });
             const data = await res.json();

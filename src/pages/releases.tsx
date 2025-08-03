@@ -26,7 +26,7 @@ export default function Releases() {
                                 <Card key={release._id} className="bg-[#1a1a1a] border-none">
                                     <CardContent className="flex space-x-4">
                                         <img
-                                            src={`http://localhost:4000/${release.coverUrl}`}
+                                            src={`${process.env.BACKEND_URL}/${release.coverUrl}`}
                                             alt={release.title}
                                             className="w-24 h-24 object-cover rounded"
                                         />

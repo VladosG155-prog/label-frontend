@@ -8,7 +8,7 @@ export const useProfileQuery = () => {
   return useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
-      const { data } = await axios.get('http://localhost:4000/profile', {
+      const { data } = await axios.get('${process.env.BACKEND_URL}/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
