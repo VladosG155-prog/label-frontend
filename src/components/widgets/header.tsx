@@ -10,7 +10,7 @@ export function Header() {
     useEffect(() => {
         const token = localStorage.getItem('auth_token');
         if (token) {
-            fetch('${process.env.BACKEND_URL}/auth/me', {
+            fetch(`${process.env.BACKEND_URL}/auth/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

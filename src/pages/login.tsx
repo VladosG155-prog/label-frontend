@@ -6,7 +6,7 @@ export default function Login() {
   const handleTelegramLogin = async () => {
     setLoading(true);
     try {
-      const res = await fetch("${process.env.BACKEND_URL}/auth/telegram/request", {
+      const res = await fetch(`${process.env.BACKEND_URL}/auth/telegram/request`, {
         method: "POST",
       });
 
