@@ -8,7 +8,7 @@ export const useReleasesQuery = () => {
   return useQuery({
     queryKey: ['releases'],
     queryFn: async () => {
-      const { data } = await axios.get(`${process.env.BACKEND_URL}/releases`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/releases`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

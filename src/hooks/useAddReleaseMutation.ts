@@ -17,7 +17,7 @@ export const useAddReleaseMutation = () => {
       data.append('cover', form.cover);
       form.wavFiles.forEach((file) => data.append('wavFiles', file));
 
-      const res = await axios.post(`${process.env.BACKEND_URL}/releases`, data, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/releases`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

@@ -13,7 +13,7 @@ export function UsersList() {
 
     const { mutate: updateUserRole } = useMutation({
         mutationFn: async ({ userId, newRole }: { userId: string; newRole: string }) => {
-            const res = await fetch('${process.env.BACKEND_URL}/admin/user', {
+            const res = await fetch('${import.meta.env.VITE_BACKEND_URL}/admin/user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId, newRole })
