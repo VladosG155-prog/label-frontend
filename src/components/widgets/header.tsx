@@ -54,7 +54,7 @@ export function Header() {
     const handleTelegramLogin = async () => {
         setLoading(true);
         try {
-            const res = await fetch('${process.env.BACKEND_URL}/auth/telegram/request', {
+            const res = await fetch(`${process.env.BACKEND_URL}/auth/telegram/request`, {
                 method: 'POST'
             });
             const data = await res.json();
