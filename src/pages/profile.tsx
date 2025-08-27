@@ -5,6 +5,22 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
+const FIELDS = [
+    {label: 'Аккаунт TG', name: 'telegramId', type: 'text'},
+       { label: 'Псевдоним', name: 'nickname', type: 'text' },
+    { label: 'Имя', name: 'firstname', type: 'text' },
+    { label: 'Фамилия', name: 'lastname', type: 'text' },
+    { label: 'Отчество', name: 'surname', type: 'text' },
+    { label: 'ИНН', name: 'INN', type: 'text' },
+    { label: 'Возраст', name: 'age', type: 'number' },
+    { label: 'Email', name: 'email', type: 'email' },
+    { label: 'Spotify', name: 'spotify' },
+    { label: 'Яндекс.Музыка', name: 'yandex' },
+    { label: 'SoundCloud', name: 'soundcloud' },
+    { label: 'VK Music', name: 'vk' },
+    { label: 'Apple Music', name: 'appleMusic' }
+];
+
 export default function Profile() {
     const { data: user, isLoading: isProfileLoading } = useProfileQuery();
     const updateProfile = useUpdateProfile();
@@ -12,22 +28,32 @@ export default function Profile() {
     const [form, setForm] = useState({
         name: '',
         age: '',
+        username: '',
         email: '',
-        links: { spotify: '', yandex: '', soundcloud: '', vk: '' }
+        nickname: '',
+        lastName: '',
+        surname: '',
+        INN: '',
+        links: { spotify: '', yandex: '', soundcloud: '', vk: '', appleMusic: '' }
     });
 
-    // Загрузка профиля в форму
     useEffect(() => {
         if (user) {
             setForm({
-                name: user.first_name || '',
+                name: user.firstname || '',
                 age: user.age || '',
+                username: user.username || '',
                 email: user.email || '',
+                nickname: user.nickname || '',
+                lastName: user.lastname || '',
+                surname: user.surname || '',
+                INN: user.INN || '',
                 links: {
                     spotify: user.links?.spotify || '',
                     yandex: user.links?.yandex || '',
                     soundcloud: user.links?.soundcloud || '',
-                    vk: user.links?.vk || ''
+                    vk: user.links?.vk || '',
+                    appleMusic: user.links?.appleMusic || ''
                 }
             });
         }
@@ -35,7 +61,7 @@ export default function Profile() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (['spotify', 'yandex', 'soundcloud', 'vk'].includes(name)) {
+        if (['spotify', 'yandex', 'soundcloud', 'vk', 'appleMusic'].includes(name)) {
             setForm((prev) => ({
                 ...prev,
                 links: { ...prev.links, [name]: value }
@@ -66,22 +92,14 @@ export default function Profile() {
                             ) : (
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        {[
-                                            { label: 'Имя', name: 'name', type: 'text' },
-                                            { label: 'Возраст', name: 'age', type: 'number' },
-                                            { label: 'Email', name: 'email', type: 'email' },
-                                            { label: 'Spotify', name: 'spotify' },
-                                            { label: 'Яндекс.Музыка', name: 'yandex' },
-                                            { label: 'SoundCloud', name: 'soundcloud' },
-                                            { label: 'VK Music', name: 'vk' }
-                                        ].map(({ label, name, type = 'text' }) => (
+                                        {FIELDS.map(({ label, name, type = 'text' }) => (
                                             <div key={name}>
                                                 <label className="block mb-1 text-gray-400">{label}</label>
                                                 <input
                                                     type={type}
                                                     name={name}
                                                     value={
-                                                        ['spotify', 'yandex', 'soundcloud', 'vk'].includes(name)
+                                                        ['spotify', 'yandex', 'soundcloud', 'vk', 'appleMusic'].includes(name)
                                                             ? form.links[name]
                                                             : form[name]
                                                     }

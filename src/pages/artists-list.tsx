@@ -1,9 +1,34 @@
 import { useArtistsQuery } from '@/hooks/useArtistsQuery';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 export function ArtistsList() {
     const { data: artists, isLoading, isError } = useArtistsQuery();
+    const queryClient = useQueryClient();
+    const token = localStorage.getItem('auth_token');
+
+    const approveMutation = useMutation({
+        mutationFn: async (artistId) => {
+            await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/artists/approve`,
+                { artistId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['releases']);
+        }
+    });
+
+    const handleApprove = (id: string) => {
+        approveMutation.mutate(id);
+    };
 
     if (isLoading) return <p>Загрузка артистов...</p>;
     if (isError) return <p>Ошибка загрузки артистов.</p>;
@@ -31,27 +56,37 @@ export function ArtistsList() {
                         <p>
                             <strong>Telegram ID:</strong> {artist.telegramId}
                         </p>
-                        <div className="flex flex-wrap gap-3 mt-3">
-                            {Object.entries(artist.links).map(([platform, url]) => {
-                                if (!url) return null;
 
-                                const href = url.startsWith('http') ? url : `https://${url}`;
+                        {artist.links && (
+                            <div className="flex flex-wrap gap-3 mt-3">
+                                {Object.entries(artist?.links).map(([platform, url]) => {
+                                    if (!url) return null;
+                                    const href = url.startsWith('http') ? url : `https://${url}`;
+                                    return (
+                                        <Button
+                                            key={platform}
+                                            variant="outline"
+                                            size="sm"
+                                            as="a"
+                                            href={href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-sm"
+                                        >
+                                            {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                                        </Button>
+                                    );
+                                })}
+                            </div>
+                        )}
 
-                                return (
-                                    <Button
-                                        key={platform}
-                                        variant="outline"
-                                        size="sm"
-                                        as="a"
-                                        href={href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-sm"
-                                    >
-                                        {platform.charAt(0).toUpperCase() + platform.slice(1)}
-                                    </Button>
-                                );
-                            })}
+                        <div className="flex gap-4 mt-4">
+                            <Button variant="default" onClick={() => handleApprove(artist._id)} disabled={approveMutation.isPending}>
+                                {approveMutation.isPending ? 'Одобрение...' : 'Одобрить'}
+                            </Button>
+                            <Button variant="destructive" onClick={() => alert('Отклонение пока не реализовано')}>
+                                Отклонить
+                            </Button>
                         </div>
                     </CardContent>
                 </Card>

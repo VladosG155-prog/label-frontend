@@ -13,6 +13,7 @@ export const useArtistsQuery = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(data.artists);
 
       return data.artists;
     },

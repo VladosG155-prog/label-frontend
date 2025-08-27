@@ -1,4 +1,4 @@
-import { BarChart2, FileTextIcon, Music, User } from 'lucide-react';
+import { BarChart2, DownloadCloud, FileTextIcon, LayoutDashboard, Music, Music2, User, UsersIcon } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const navItems = [
@@ -6,7 +6,12 @@ const navItems = [
     { label: 'Профиль', to: '/profile', icon: User },
     { label: 'Статистика', to: '/stats', icon: BarChart2 },
     { label: 'Релизы', to: '/releases', icon: Music },
-    { label: 'Добавление релиза', to: '/add-release', icon: FileTextIcon }
+    { label: 'Добавление релиза', to: '/add-release', icon: FileTextIcon },
+    { label: 'Пользователи', to: '/admin/users', icon: UsersIcon, private: 'admin' },
+    { label: 'Дашборд', to: '/admin/dashboard', icon: LayoutDashboard, private: 'admin' },
+    { label: 'Релизы', to: '/moderation', icon: LayoutDashboard, private: 'moderator' },
+    { label: 'Артисты', to: '/artists', icon: Music2, private: 'moderator' },
+    { label: 'Договора', to: '/create-doc', icon: DownloadCloud },
 ];
 
 export function Aside() {
