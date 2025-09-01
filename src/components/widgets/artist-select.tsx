@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Check, ChevronsUpDown, Plus } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
 
 // 🔹 импортируем хук
 import { useCreateArtist } from '@/hooks/useCreateArtistMutation';
@@ -21,7 +22,7 @@ interface ArtistSelectProps {
     isMulti: boolean;
 }
 
-const FIELDS = [
+const BASE_FIELDS = [
     { label: 'Аккаунт TG', name: 'username', type: 'text' },
     { label: 'Псевдоним', name: 'nickname', type: 'text' },
     { label: 'Имя', name: 'firstname', type: 'text' },
@@ -30,7 +31,6 @@ const FIELDS = [
     { label: 'Адрес регистрации', name: 'adress', type: 'text' },
     { label: 'Почтовый адрес', name: 'postadress', type: 'text' },
     { label: 'Номер телефона', name: 'phone', type: 'text' },
-    { label: 'ИНН', name: 'INN', type: 'text' },
     { label: 'Возраст', name: 'age', type: 'number' },
     { label: 'Email', name: 'email', type: 'email' },
     { label: 'Spotify', name: 'spotify' },
@@ -50,9 +50,9 @@ export default function ArtistSelect({ artists, onSelect, isMulti }: ArtistSelec
     const [selected, setSelected] = useState<Artist | null>(null);
     const [query, setQuery] = useState('');
     const [form, setForm] = useState<Record<string, string>>({});
+    const [isForeign, setIsForeign] = useState(false);
 
     // 🔹 используем хук
-
     const createArtist = useCreateArtist();
 
     const filtered = artists?.filter((a) => a.username.toLowerCase().includes(query.toLowerCase()));
@@ -80,6 +80,7 @@ export default function ArtistSelect({ artists, onSelect, isMulti }: ArtistSelec
                 onSelect(newArtist);
                 setModalOpen(false);
                 setForm({});
+                setIsForeign(false);
             },
             onError: (err) => {
                 console.error(err);
@@ -145,8 +146,15 @@ export default function ArtistSelect({ artists, onSelect, isMulti }: ArtistSelec
                     <DialogHeader>
                         <DialogTitle>Добавить артиста</DialogTitle>
                     </DialogHeader>
+
+                    {/* 🔹 переключатель */}
+                    <div className="flex items-center gap-3 mb-4">
+                        <Switch checked={isForeign} onCheckedChange={setIsForeign} />
+                        <Label>Иностранец</Label>
+                    </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-4">
-                        {FIELDS.map((field) => (
+                        {BASE_FIELDS.map((field) => (
                             <div key={field.name} className="flex flex-col gap-2">
                                 <Label htmlFor={field.name}>{field.label}</Label>
                                 <Input
@@ -158,7 +166,20 @@ export default function ArtistSelect({ artists, onSelect, isMulti }: ArtistSelec
                                 />
                             </div>
                         ))}
+
+                        {/* 🔹 условное поле */}
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor={isForeign ? 'documentInfo' : 'INN'}>{isForeign ? 'Информация о документе' : 'ИНН'}</Label>
+                            <Input
+                                id={isForeign ? 'documentInfo' : 'INN'}
+                                type="text"
+                                value={form[isForeign ? 'documentInfo' : 'INN'] || ''}
+                                onChange={(e) => handleFormChange(isForeign ? 'documentInfo' : 'INN', e.target.value)}
+                                className="bg-gray-900 border-gray-800 text-gray-100"
+                            />
+                        </div>
                     </div>
+
                     <DialogFooter>
                         <Button onClick={() => setModalOpen(false)} variant="ghost" className="border border-gray-800">
                             Отмена
