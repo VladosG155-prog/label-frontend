@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Plus, Trash } from 'lucide-react';
 import { useCreateDocument } from '@/hooks/useCreateDocument';
+import { Switch } from '@/components/ui/switch';
 
 interface Track {
     title: string;
@@ -21,6 +22,7 @@ export const CreateDoc = () => {
     const { data: artists, isLoading } = useArtistsQuery();
     const [selectedArtists, setSelectedArtists] = useState<any[]>([]);
     const [tracks, setTracks] = useState<Track[]>([]);
+    const [isHalf, setIsHalf] = useState(false);
     const [contractId, setContractId] = useState<string>(''); // 🔹 глобальный ID договора
     const createDocument = useCreateDocument();
 
@@ -85,7 +87,7 @@ export const CreateDoc = () => {
     };
 
     const handleSubmit = () => {
-        createDocument.mutate({ contractId, artists: selectedArtists, tracks });
+        createDocument.mutate({ contractId, contractType: isHalf ? '50/50' : '80/20', artists: selectedArtists, tracks });
     };
 
     const filteredArtists = artists?.filter((artist) => !selectedArtists.some((a) => a.username === artist.username));
@@ -106,7 +108,11 @@ export const CreateDoc = () => {
                     placeholder="Введите ID договора"
                 />
             </div>
-
+            <div className="mb-6 flex items-center gap-4">
+                <Label>Тип договора:</Label>
+                <span className="text-gray-300">{isHalf ? '50/50' : '80/20'}</span>
+                <Switch checked={isHalf} onCheckedChange={setIsHalf} />
+            </div>
             {/* Артисты */}
             <div className="mb-8">
                 <Label className="text-gray-300 mb-2">Выберите артистов</Label>
